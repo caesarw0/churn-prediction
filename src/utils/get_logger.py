@@ -1,3 +1,19 @@
+# Author: Caesar Wong
+# Date: 2022-12-24
+
+"""
+A script that read the logging configuration file and return a logger for other function.
+The logger has a file handler which uses the script running date as the file name.
+
+Usage: 
+(in another py script)
+    from utils.get_logger import return_logger
+    logger = return_logger()
+
+    logger.info("sample logging info msg")
+
+"""
+
 import logging
 import logging.config
 import datetime as dt
@@ -5,6 +21,22 @@ import configparser
 import os
 
 def return_logger():
+    '''
+    return a logger that is ready to use
+    
+    Parameters
+    ----------
+    
+    Description
+    ----------
+    1. Get the logging config file
+    2. Generate filename (today's date, yyyy-mm-dd.log)
+    3. Configure the logger with config file
+    4. Add file handler to the logger (with the generated filename)
+    5. Add formatter to the file handler
+    6. Return logger
+    '''
+
     path = os.getcwd()
 
     config_filename = path + '\config\logging.conf'
