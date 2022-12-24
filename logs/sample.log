@@ -1,0 +1,8 @@
+2022-12-24 02:40:45,333 - src/preprocessing.py - INFO - Begin General Preprocessing
+2022-12-24 02:40:45,333 - src/preprocessing.py - INFO - Correct dataframe shape
+2022-12-24 02:40:45,337 - src/preprocessing.py - INFO - Correct dataframe shape after dropping unnecessary columns
+2022-12-24 02:40:45,338 - src/preprocessing.py - INFO - df shape : (10000, 11)
+2022-12-24 02:40:45,338 - src/preprocessing.py - INFO - Finish General Preprocessing
+2022-12-24 02:40:45,340 - src/preprocessing.py - INFO - train_df shape : (7000, 11)
+2022-12-24 02:40:45,340 - src/preprocessing.py - INFO - Storing Data
+2022-12-24 02:40:45,420 - src/preprocessing.py - INFO - Data Storing Completed - End of Preprocessing
