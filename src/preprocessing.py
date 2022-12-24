@@ -29,6 +29,25 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from utils.print_msg import print_msg # adding utils function for print msg
 
 
+import logging
+import logging.config
+import datetime as dt
+import configparser
+config = configparser.ConfigParser()
+config.read_file(open('../config/logging.conf'))
+format_from_config = config.get('formatter_simpleFormatter', 'format', raw=True)
+# set log filename
+today = dt.datetime.today()
+filename = f"../logs/{today.year}_{today.month:02d}_{today.day:02d}.log"
+
+# read logger conf
+logging.config.fileConfig('../config/logging.conf')
+# create logger, setup file handler & add it to logger
+logger = logging.getLogger('src/preprocessing.py')
+file_handler = logging.FileHandler(filename)
+file_handler.setFormatter(logging.Formatter(format_from_config))
+logger.addHandler(file_handler)
+
 opt = docopt(__doc__) # This would parse into dictionary in python
 
 def generalPreprocessing(df):
@@ -48,13 +67,16 @@ def generalPreprocessing(df):
     Examples
     --------
     >>> generalPreprocessing(df)
-    df object
+    <df object>
     '''
     
     # testing column shape
-    assert df.shape[1] == 14, "Wrong dataframe shape (incorrect number of columns)"
-    # testing typo
-    assert 'Exited' in df.columns, "target is missing"
+    try:
+        assert df.shape[1] == 14
+        logger.info("Correct dataframe shape")
+    except AssertionError:
+        logger.error("Wrong dataframe shape (incorrect number of columns)123")
+        raise
 
     # drop na from df
     df = df.dropna()
@@ -62,9 +84,14 @@ def generalPreprocessing(df):
     # Dropping unnecessary columns
     df.drop(['RowNumber','CustomerId','Surname'], axis=1, inplace=True)
     
-    assert df.shape[1] == 11, "Wrong dataframe shape after dropping unnecessary columns"
+    try:
+        assert df.shape[1] == 11
+        logger.info("Correct dataframe shape after dropping unnecessary columns")
+    except:
+        logger.error("Wrong dataframe shape after dropping unnecessary columns")
+        raise
 
-    print("df shape : " + str(df.shape))
+    logger.info("df shape : " + str(df.shape))
     return df
 
 def columnTransformation(train_df, test_df):
@@ -160,15 +187,15 @@ def main(input_path, sep, test_size, random_state, output_path):
     
     '''
     df = pd.read_csv(input_path, sep=sep)
-    print_msg("Begin General Preprocessing")
+    logger.info("Begin General Preprocessing")
     df = generalPreprocessing(df)
-    print_msg("Finish General Preprocessing")
+    logger.info("Finish General Preprocessing")
     # data splitting
     train_df, test_df = train_test_split(df, test_size=float(test_size), random_state=int(random_state))
 
-    print("train_df shape : " + str(train_df.shape))
+    logger.info("train_df shape : " + str(train_df.shape))
 
-    print_msg("Storing Data")
+    logger.info("Storing Data")
 
     # calling local columnTransformation function
     transformed_train_df, transformed_test_df = columnTransformation(train_df, test_df)
@@ -176,7 +203,7 @@ def main(input_path, sep, test_size, random_state, output_path):
     transformed_train_df.to_csv(output_path + '/train.csv', index=False)
     transformed_test_df.to_csv(output_path + '/test.csv', index=False)
 
-    print_msg("Data Storing Completed - End of Preprocessing")
+    logger.info("Data Storing Completed - End of Preprocessing")
 
 
 if __name__ == "__main__":
