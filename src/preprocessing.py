@@ -28,25 +28,9 @@ from sklearn.compose import  make_column_transformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from utils.print_msg import print_msg # adding utils function for print msg
 
+from utils.get_logger import return_logger
 
-import logging
-import logging.config
-import datetime as dt
-import configparser
-config = configparser.ConfigParser()
-config.read_file(open('../config/logging.conf'))
-format_from_config = config.get('formatter_simpleFormatter', 'format', raw=True)
-# set log filename
-today = dt.datetime.today()
-filename = f"../logs/{today.year}_{today.month:02d}_{today.day:02d}.log"
-
-# read logger conf
-logging.config.fileConfig('../config/logging.conf')
-# create logger, setup file handler & add it to logger
-logger = logging.getLogger('src/preprocessing.py')
-file_handler = logging.FileHandler(filename)
-file_handler.setFormatter(logging.Formatter(format_from_config))
-logger.addHandler(file_handler)
+logger = return_logger()
 
 opt = docopt(__doc__) # This would parse into dictionary in python
 
