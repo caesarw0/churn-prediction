@@ -1,2 +1,5 @@
 # ignore local log file
 logs/*.log
+
+# ignore all the pycache
+__pycache__/
