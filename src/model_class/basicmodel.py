@@ -1,5 +1,5 @@
 # Author: Caesar Wong
-# Date: 2022-12-24
+# Date: 2022-12-25
 
 """
 A python class that defines the basic modelling (e.g. dummy, regressor, classifier)
@@ -8,17 +8,25 @@ A python class that defines the basic modelling (e.g. dummy, regressor, classifi
 
 import pandas as pd
 from sklearn.model_selection import cross_validate
+
 import os
 import pickle
 
-class basicmodel:
+from utils.get_logger import return_logger
+logger = return_logger()
 
-    def __init__(self, name, model, out_dir):
+
+class basicModel:
+
+    def __init__(self, name, model, X_train, y_train, scoring_metric, out_dir):
         self.name = name # model name
         self.model = model # sklearn / other model object / pipeline / best estimator
+        self.X_train = X_train
+        self.y_train = y_train
+        self.scoring_metric = scoring_metric
         self.out_dir = out_dir # model output directory
 
-    def mean_std_cross_val_scores(self, X_train, y_train, **kwargs):
+    def mean_std_cross_val_scores(self, **kwargs):
         """
         Returns mean and std of cross validation
 
@@ -43,8 +51,9 @@ class basicmodel:
         train_score: xxxx (+/- xxxx)
         test_score: xxxx (+/- xxxx)
         """
+        logger.info(self.name + " model cross validation ...")
 
-        scores = cross_validate(self.model, X_train, y_train, return_train_score=True,**kwargs)
+        scores = cross_validate(self.model, self.X_train, self.y_train, return_train_score=True,**kwargs)
 
         mean_scores = pd.DataFrame(scores).mean()
         std_scores = pd.DataFrame(scores).std()
@@ -57,7 +66,7 @@ class basicmodel:
 
 
     def model_saving(self):
-
+        logger.info(self.name + " model saving ...")
         try:
             file_log = open(self.out_dir + '/model_' + self.name, 'wb')
         except:
@@ -65,3 +74,13 @@ class basicmodel:
             file_log = open(self.out_dir + '/model_' + self.name, 'wb')
 
         pickle.dump(self.model, file_log)
+
+    def model_training_saving(self):
+
+       
+        logger.info(self.name + " model training ...")
+        self.model.fit(self.X_train, self.y_train)
+        self.model_saving()
+        logger.info(self.name + " model training & saving completed")
+
+    
