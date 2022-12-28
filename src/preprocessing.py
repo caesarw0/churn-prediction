@@ -26,7 +26,6 @@ import pandas as pd
 
 from sklearn.compose import  make_column_transformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from utils.print_msg import print_msg # adding utils function for print msg
 
 from utils.get_logger import return_logger
 

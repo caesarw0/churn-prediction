@@ -5,8 +5,14 @@
 Configuration script for yacs library, mainly for storing default model configuration value
 
 
-Usage: 
+Usage: (from src/ folder)
 
+>>> from config.model_config import get_cfg_defaults
+>>> cfg = get_cfg_defaults()
+>>> cfg.freeze()
+
+>>> cfg.MODEL.RANDOM_STATE
+123
 """
 
 from yacs.config import CfgNode as CN
