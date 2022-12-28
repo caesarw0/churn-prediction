@@ -44,7 +44,7 @@ cfg = get_cfg_defaults()
 cfg.freeze()
 
 
-from model_class.basicModel import basicModel
+from model_class.basicmodel import basicModel
 
 def define_model(X_train, y_train, out_dir):
     '''
@@ -67,10 +67,10 @@ def define_model(X_train, y_train, out_dir):
     # sequence of model definition
     logger.info("Begin model definition ...")
     model_list = []
-    log_model = LogisticRegression(max_iter=cfg.MODEL.MAX_ITER, class_weight=cfg.MODEL.CLASS_WEIGHT)
+    log_model = LogisticRegression(max_iter=cfg.MODEL.MAX_ITER, class_weight=cfg.MODEL.CLASS_WEIGHT, random_state=cfg.MODEL.RANDOM_STATE)
     ratio = np.bincount(y_train)[0] / np.bincount(y_train)[1]
     feat_sel = SelectFromModel(
-                LogisticRegression(solver="liblinear", penalty="l1", max_iter=1000)
+                LogisticRegression(solver="liblinear", penalty="l1", max_iter=1000, random_state=cfg.MODEL.RANDOM_STATE)
             )
 
     model_dict = {"dummy": DummyClassifier(),

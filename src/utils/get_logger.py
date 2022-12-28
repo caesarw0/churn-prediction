@@ -39,7 +39,7 @@ def return_logger():
 
     path = os.getcwd()
 
-    config_filename = path + '\config\logging.conf'
+    config_filename = path + '\src\config\logging.conf'
     
     config = configparser.ConfigParser()
     config.read_file(open(config_filename))
@@ -47,7 +47,7 @@ def return_logger():
     # set log filename
     today = dt.datetime.today()
     log_filename = f"\logs\{today.year}_{today.month:02d}_{today.day:02d}.log"
-    log_filepath = os.path.dirname(path) + log_filename
+    log_filepath = path + log_filename
     # read logger conf
     logging.config.fileConfig(config_filename)
     # create logger, setup file handler & add it to logger
