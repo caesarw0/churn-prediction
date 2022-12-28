@@ -7,8 +7,10 @@ A python class that defines the basic modelling (e.g. dummy, regressor, classifi
 """
 
 import pandas as pd
-from sklearn.model_selection import cross_validate
-
+from sklearn.model_selection import (
+    RandomizedSearchCV,
+    cross_validate,
+)
 import os
 import pickle
 
@@ -25,6 +27,9 @@ class basicModel:
         self.y_train = y_train
         self.scoring_metric = scoring_metric
         self.out_dir = out_dir # model output directory
+        self.is_search = False
+        if (isinstance(self.model, RandomizedSearchCV)):
+            self.is_search = True
 
     def mean_std_cross_val_scores(self, **kwargs):
         """
@@ -53,7 +58,11 @@ class basicModel:
         """
         logger.info(self.name + " model cross validation ...")
 
-        scores = cross_validate(self.model, self.X_train, self.y_train, return_train_score=True,**kwargs)
+        if(self.is_search):
+            scores = cross_validate(self.model.best_estimator_, self.X_train, self.y_train, return_train_score=True,**kwargs)
+        else:
+            scores = cross_validate(self.model, self.X_train, self.y_train, return_train_score=True,**kwargs)
+        
 
         mean_scores = pd.DataFrame(scores).mean()
         std_scores = pd.DataFrame(scores).std()
@@ -72,15 +81,17 @@ class basicModel:
         except:
             os.makedirs(os.path.dirname(self.out_dir))
             file_log = open(self.out_dir + '/model_' + self.name, 'wb')
+        if(self.is_search):
+            pickle.dump(self.model.best_estimator_, file_log)
+        else:
+            pickle.dump(self.model, file_log)
 
-        pickle.dump(self.model, file_log)
-
-    def model_training_saving(self):
+    def model_fitting_saving(self):
 
        
-        logger.info(self.name + " model training ...")
+        logger.info(self.name + " model fitting ...")
         self.model.fit(self.X_train, self.y_train)
         self.model_saving()
-        logger.info(self.name + " model training & saving completed")
+        logger.info(self.name + " model fitting & saving completed")
 
     
