@@ -16,7 +16,7 @@ Options:
 """
 
 # Example:
-# python preprocessing.py --input_path="../data/raw/data.csv" --sep=',' --test_size=0.2 --random_state=522 --output_path="../data/processed"
+# python preprocessing.py --input_path="../data/raw/data.csv" --sep=',' --test_size=0.3 --random_state=123 --output_path="../data/processed"
 
 # importing necessary modules
 from docopt import docopt
