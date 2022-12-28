@@ -18,24 +18,16 @@ Options:
 
 # import
 from docopt import docopt
-import os
 import numpy as np
 import pandas as pd
-from scipy.stats import lognorm, loguniform, randint
 from sklearn.model_selection import (
-    GridSearchCV,
-    RandomizedSearchCV,
-    cross_validate,
-    train_test_split,
+    RandomizedSearchCV
 )
 from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline, make_pipeline
-from sklearn.naive_bayes import GaussianNB
+from sklearn.pipeline import make_pipeline
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import f1_score, make_scorer, recall_score
 from sklearn.dummy import DummyClassifier
 from lightgbm.sklearn import LGBMClassifier
-from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from sklearn.feature_selection import SelectFromModel
 
@@ -55,7 +47,23 @@ cfg.freeze()
 from model_class.basicModel import basicModel
 
 def define_model(X_train, y_train, out_dir):
+    '''
+    define all the neccessary model for model training
+    
+    Parameters
+    ----------
+    X_data : df
+        X (features) of the training data
+    y_data : df
+        y (target) of the training data
+    out_dir : str
+        output directory path
 
+    Returns
+    -------
+    model_list : list
+        list of pre-defined model
+    '''
     # sequence of model definition
     logger.info("Begin model definition ...")
     model_list = []
@@ -106,6 +114,18 @@ def define_model(X_train, y_train, out_dir):
     return model_list
 
 def model_fit_save(model_list):
+    '''
+    given a list of model, perform model training & save the model to the out_dir 
+    
+    Parameters
+    ----------
+    model_list : list
+        list of pre-defined model
+
+    Returns
+    -------
+    store model under the results/model_output/ folder
+    '''
     logger.info("Begin all model fitting & saving ...")
     for model in model_list:
         model.model_fitting_saving()
@@ -113,7 +133,19 @@ def model_fit_save(model_list):
     pass
 
 def get_cv_result(model_list):
+    '''
+    given a list of model, perform cross validation 
     
+    Parameters
+    ----------
+    model_list : list
+        list of pre-defined model
+
+    Returns
+    -------
+    cross_val_results : dict
+        model CV results (key: model name, value: mean/std cv scores)
+    '''
     logger.info("Begin cross validation ...")
     cross_val_results = {}
 
@@ -126,7 +158,22 @@ def get_cv_result(model_list):
 
 
 def main(train, target_name, out_dir):
+    '''
+    given a list of model, perform cross validation 
+    
+    Parameters
+    ----------
+    train : str
+        training data path
+    target_name : str
+        class label name
+    out_dir : str
+        output directory path
 
+    Returns
+    -------
+    store model & cv result under results/ folder
+    '''
     logger.info("Begin Model Training")
     
     # get training data
