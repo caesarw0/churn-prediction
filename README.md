@@ -1,6 +1,8 @@
 # churn-prediction
 
 ![bank](img/bank_graphic.jpg)
+Figure 1: Bank Customer Illustration
+Source: Adapted from [1]
 
 ## Introduction
 
@@ -19,3 +21,4 @@ Implemented using software engineering practice
 - modular code
 - unit test (future direction)
 
+[1] A. Frazier. "Improving Customer Communication at Your Bank." ProcessMaker. Accessed: Dec. 28, 2022. [Online]. Available: https://www.processmaker.com/blog/improve-bank-customer-communication/

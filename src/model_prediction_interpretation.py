@@ -231,7 +231,7 @@ def main(train, test, target_name, target_names, model_path, out_dir):
     >>> main(opt["--train"], opt["--test"], opt["--target_name"], opt["--target_names"], opt["--model_path"], opt["--out_dir"])
     '''
     logger.info("Begin Model Prediction & Interpretation ...")
-    # get train dat
+    # get train data
     train_df = pd.read_csv(train, float_precision='round_trip')
     X_train, y_train = train_df.drop(columns=[target_name]), train_df[target_name]
 
@@ -241,7 +241,7 @@ def main(train, test, target_name, target_names, model_path, out_dir):
 
     # print(y_test.value_counts())
     selected_model = get_model(model_path)
-
+    
     target_name_list = target_names.split(",")
 
     tree_interpreter = tree_model_interpreter(
