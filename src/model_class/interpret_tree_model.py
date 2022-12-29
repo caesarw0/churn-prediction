@@ -65,9 +65,12 @@ class tree_model_interpreter:
         -------
         tree explainer object
         '''
+        
         if (isinstance(self.model, Pipeline)):
+            self.model[-1].fit(self.X_train, self.y_train)
             return shap.TreeExplainer(self.model[-1])
         else:
+            self.model.fit(self.X_train, self.y_train)
             return shap.TreeExplainer(self.model)
 
     def get_shap_values_on_train(self):
@@ -140,8 +143,11 @@ class tree_model_interpreter:
         -------
         shap force plot
         '''
+        expected_value = self.get_tree_explainer().expected_value[0]
+        if len(self.get_tree_explainer().expected_value) == 1 and expected_value < 0:
+            expected_value *= -1
         return shap.force_plot(
-                    self.get_tree_explainer().expected_value[0],
+                    expected_value,#self.get_tree_explainer().expected_value[0],
                     shap_values[0][sample_ind, :],
                     dataset.iloc[sample_ind, :],
                     matplotlib=True,
