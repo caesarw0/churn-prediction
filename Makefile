@@ -18,7 +18,7 @@ data/processed/train.csv data/processed/test.csv: data/raw/Churn_Modelling.csv s
 results/model_output/model_dummy: data/processed/train.csv data/processed/test.csv src/model_training.py
 	python src/model_training.py --train="data/processed/train.csv" --target_name="Exited" --out_dir="results/"
 
-results/prediction_output/classification_report.csv: results/model_output/model_lgbm
+results/prediction_output/classification_report.csv: results/model_output/model_dummy
 	python src/model_prediction_interpretation.py --train="data/processed/train.csv" --test="data/processed/test.csv" --target_name="Exited" --target_names="Stayed,Exited" --model_path="results/model_output/" --out_dir="results/prediction_output/"
 
 # # generate html report
